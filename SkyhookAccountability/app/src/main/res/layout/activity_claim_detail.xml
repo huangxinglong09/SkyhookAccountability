@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_grey"
+        android:orientation="vertical"
+        tools:context=".activity.claim.ClaimDetailActivity">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/colorPrimary">
+        <Button
+                android:id="@+id/backButton"
+                android:layout_width="15dp"
+                android:layout_height="22dp"
+                android:background="@drawable/back"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="20dp"
+                />
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/addNewButton"
+                android:layout_alignStart="@id/backButton"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="21sp"
+                    android:textStyle="bold"
+                    android:paddingTop="10dp"
+                    android:text="Claim Detail"
+                    />
+            <TextView
+                    android:id="@+id/claimNumberTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:text="B-1012"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="5dp"
+                    />
+        </LinearLayout>
+        <Button
+                android:id="@+id/addNewButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/add_new"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="20dp"
+                />
+    </RelativeLayout>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <ListView
+                android:id="@+id/claimActivityListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="80dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+               />
+
+        <com.ncorti.slidetoact.SlideToActView
+                android:id="@+id/closeClaimButton"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                app:inner_color="@color/colorPrimary"
+                app:outer_color="@color/light_blue"
+                app:slider_icon_color="@color/white"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="15dp"
+                app:text="CLOSE CLAIM" />
+
+
+    </FrameLayout>
+
+
+    <LinearLayout
+            android:id="@+id/placeHolderLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="20dp">
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_grey"
+                android:textAlignment="center"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:text="Create a new activity to get started on your claim assignment."/>
+        <Button
+                android:onClick="createFirst"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:background="@color/colorPrimary"
+                android:text="Start New Activity"/>
+
+    </LinearLayout>
+
+</LinearLayout>

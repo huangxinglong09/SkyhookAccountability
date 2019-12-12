@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".activity.claim.Activity.AddNewActivity">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/colorPrimary">
+        <Button
+                android:id="@+id/backButton"
+                android:layout_width="15dp"
+                android:layout_height="22dp"
+                android:background="@drawable/back"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="20dp"
+                />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:layout_margin="20dp"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_centerInParent="true"
+                android:text="New Activity"
+                android:layout_alignLeft="@id/backButton"
+                android:padding="10dp"
+                />
+
+    </RelativeLayout>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:id="@+id/addNewLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_grey"
+                android:orientation="vertical">
+
+            <EditText
+                    android:id="@+id/activityNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_margin="25dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/light_grey"
+                    android:background="@drawable/border_grey"
+                    android:padding="3dp"
+                    android:hint="Activity name"/>
+
+            <Button
+                    android:onClick="onCreate"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:text="Create Activity"/>
+
+        </LinearLayout>
+
+        <ListView
+                android:id="@+id/activityItemsListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:dividerHeight="0dp" />
+
+    </FrameLayout>
+
+
+
+
+</LinearLayout>

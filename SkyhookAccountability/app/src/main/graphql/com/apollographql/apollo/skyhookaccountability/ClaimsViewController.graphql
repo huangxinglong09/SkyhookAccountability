@@ -1,0 +1,185 @@
+
+
+
+query ClaimsList  {
+    claims {
+        edges {
+            node {
+                id
+                claimNumber
+                claimDate
+                dueDate
+                lossDate
+                insured {
+                    name
+                    phoneM
+                    phoneB
+                    email
+                    address {
+                        street1
+                        street2
+                        city
+                        state
+                        zip
+                    }
+                }
+                claimant {
+                    name
+                    phone
+                    legal {
+                        name
+                        contact
+                        phone
+                        address {
+                            street1
+                            street2
+                            city
+                            state
+                            zip
+                        }
+                    }
+                    address {
+                        street1
+                        street2
+                        city
+                        state
+                        zip
+                    }
+
+
+                }
+                customer {
+                    id
+                    customerName
+                    customerContact
+                    phone
+                    email
+                    address {
+                        street1
+                        street2
+                        city
+                        state
+                        zip
+                    }
+                }
+                ia{
+                    id
+                    iaName
+                    iaContact
+                    phone
+                    email
+                    address {
+                        street1
+                        street2
+                        city
+                        state
+                        zip
+                    }
+                }
+                status
+                activities {
+                    edges {
+                        node {
+                            id
+                            name
+                            totalElapsedMillis
+                            geo
+                            flags
+                            notes
+                            status
+                            uploads {
+                                uploadId
+                                url
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+mutation UpdateClaimEnd($claimId:ID!) {
+  updateClaimEnd(input: { claimId: $claimId }) {
+     success
+     message
+  }
+}
+
+
+mutation CreateActivity($claimId:ID!, $name:String!, $status:ActivityStatus,$type:ActivityType) {
+  createActivity(input: {
+    claimId: $claimId,
+    name: $name,
+    status: $status,
+    type: $type
+  }) {
+    activity {
+      id
+      name
+      totalElapsedMillis
+      geo
+      flags
+      notes
+      status
+      started
+      completed
+    }
+  }
+}
+
+mutation UpdateActivityStart($activityId:ID!) {
+  updateActivityStart(input: { activityId: $activityId }) {
+    success
+    message
+  }
+}
+
+mutation UpdateActivityPause($activityId:ID!, $pause:Boolean!) {
+  updateActivityPause(input: { activityId: $activityId, pause: $pause }) {
+    success
+    message
+  }
+}
+
+mutation UpdateActivityEnd($activityId:ID!) {
+  updateActivityEnd(input: { activityId: $activityId }) {
+     success
+     message
+  }
+}
+
+
+mutation UpdateActivityGeoInput($activityId:ID!, $path:String!, $flag:String!) {
+  updateActivityGeo(input: { activityId: $activityId, path: $path, flag: $flag }) {
+    success
+    message
+  }
+}
+
+mutation UpdateNotes($activityId: ID!, $note: String!) {
+  updateActivityNotes(input: {
+    activityId: $activityId,
+    note: $note
+  }) {
+    success
+    message
+  }
+}
+
+mutation ActivityFileUpload($activityId: ID!, $file: String!){
+    updateActivityUpload(input: {activityId: $activityId, file: $file}){
+        upload{
+            id
+            path
+
+        }
+
+    }
+}
+
+
+
+
+

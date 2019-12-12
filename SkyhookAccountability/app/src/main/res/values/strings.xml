@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Skyhook Accountability</string>
+
+    <string name="login_welcome">Welcome to SKYHOOK</string>
+
+    <string name="input_email">Please, enter your email address</string>
+
+    <string name="location_request">Skyhook requires you to turn on your location for tracking your claim activity.</string>
+
+    <string name="tab0">My Claims</string>
+    <string name="tab1">Notifications</string>
+    <string name="tab2">Settings</string>
+    <string name="tab3">Profile</string>
+
+
+    <string name="assigned_from">ASSIGNED FROM</string>
+    <string name="insured">INSURED</string>
+    <string name="claimant">CLAIMANT</string>
+    <string name="claimant_legal">CLAIMANT LEGAL</string>
+
+
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

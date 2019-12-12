@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center_vertical"
+        android:padding="15dp"
+        android:background="@color/white">
+
+    <TextView
+            android:id="@+id/activityNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
+            android:text="Activity item"
+            android:textColor="@color/dark_grey"
+            android:textSize="19sp"
+        />
+
+</LinearLayout>
