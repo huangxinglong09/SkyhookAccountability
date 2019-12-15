@@ -50,7 +50,7 @@ class App: Application() {
     }
 
     //graphql
-    val BASE_URL = "http://sky-dev.herokuapp.com/graphql"
+    val BASE_URL = "http://sky-dev.ambrosia-med.com/graphql"
     lateinit var apollo: ApolloClient
 
     //local storage

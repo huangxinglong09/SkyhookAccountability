@@ -118,7 +118,9 @@ class ProfileFragment : Fragment() {
                         }
                     }
                     claimAdapter = ClaimAdapter(activity!!.applicationContext,claimsList)
-                    closedClaimListView.adapter = claimAdapter
+                    if (closedClaimListView != null) {
+                        closedClaimListView.adapter = claimAdapter
+                    }
                 }
 
             }

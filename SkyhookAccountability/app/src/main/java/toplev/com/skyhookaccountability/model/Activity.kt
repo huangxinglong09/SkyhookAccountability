@@ -1,5 +1,7 @@
 package toplev.com.skyhookaccountability.model
 
+import android.util.Log
+import android.webkit.MimeTypeMap
 import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.Response
@@ -7,13 +9,16 @@ import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.skyhookaccountability.*
 import com.apollographql.apollo.skyhookaccountability.type.ActivityStatus
 import com.apollographql.apollo.skyhookaccountability.type.ActivityType
+import okhttp3.*
 import toplev.com.skyhookaccountability.support.App
+import java.io.File
+import java.io.IOException
 import java.io.Serializable
 import java.util.concurrent.TimeUnit
 
 
 class Activity: Serializable {
-
+    private val TAG = "modelActivity"
 
     var id = ""
     var name = ""
@@ -260,42 +265,98 @@ class Activity: Serializable {
     }
 
 
+    fun uploadImage(fileToUpload: File, callback: (Boolean) -> Unit) {
+       var mimeType = "image/jpeg"
+        val extension = MimeTypeMap.getFileExtensionFromUrl(fileToUpload.path)
+        if (extension != null) {
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)!!
+        }
 
-//    fun uploadImage(image: String, callback: (Boolean) -> Unit){
+        val mutation = ActivityFileUploadMutation.builder()
+//            .file(FileUpload(mimeType, file))
+            .file(fileToUpload.path)
+            .activityId(this.id)
+            .build()
 
-//        //Push geo and time data
-//        val mutation =
-//
-//        App.shared!!.apollo.mutate(mutation).enqueue(object : ApolloCall.Callback<UpdateNotesMutation.Data>() {
+        val operationDefinition = "{\"query\": \"" +
+                "mutation ActivityFileUpload(\$activityId: ID!, \$file: Upload!) { updateActivityUpload(input: {activityId: \$activityId, file: \$file}) { upload { id path } } }" +
+                "\", \"variables\": { \"activityId\": \"" +
+                this.id +
+                "\" ,\"file\": null } }"
+
+
+        try {
+            val okHttpClient = OkHttpClient.Builder().addNetworkInterceptor { chain ->
+                val request = chain.request()
+                    .newBuilder()
+                    .addHeader("Authorization", "Bearer " + App.shared!!.user.jwt)
+                    .build()
+                chain.proceed(request)
+            }.build()
+
+            val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("operations", operationDefinition)
+                .addFormDataPart("map", "{ \"0\": [\"variables.file\"] }")
+                .addFormDataPart(
+                    "0",
+                    fileToUpload.name,
+                    RequestBody.create(MediaType.parse("image/png"), fileToUpload)
+                ).build()
+
+            val request = Request.Builder()
+                .url(App.shared!!.BASE_URL)
+                .post(requestBody)
+                .build()
+
+            okHttpClient.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                }
+
+                override fun onResponse(call: Call, response: okhttp3.Response) {
+                    if (response.isSuccessful) {
+                        Log.i(TAG, "success")
+                        callback(true)
+                    } else {
+                        Log.i(TAG, "fail")
+                        callback(false)
+                    }
+                }
+
+            })
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+
+
+//        App.shared!!.apollo.mutate(mutation).enqueue(object : ApolloCall.Callback<ActivityFileUploadMutation.Data>() {
 //
 //            override fun onFailure(e: ApolloException) {
-//                System.out.println("Failed to update notes... "+e.localizedMessage);
+//                println("Failed to update notes... "+e.localizedMessage);
+//                Log.i(TAG, "onFailure")
 //                callback(false)
 //            }
 //
-//            override fun onResponse(response: Response<UpdateNotesMutation.Data>) {
-//                System.out.println("Notes pushed...");
+//            override fun onResponse(response: Response<ActivityFileUploadMutation.Data>) {
+//                println("Notes pushed...")
+//                println(response.data().toString())
+//                Log.i(TAG, "success")
 //
-//                System.out.println(response.data().toString())
-//
-//                if (response.data()!!.updateActivityNotes() != null && response.data()!!.updateActivityNotes()!!.success()) {
+//                if (response.data()!!.updateActivityUpload() != null) {
 //                    //success.. added notes
-//                    response.data()!!.updateActivityNotes()
-//                    if(!this@Activity.notes.equals("")){
-//                        this@Activity.notes = this@Activity.notes+"\n"+notes
-//                    } else {
-//                        this@Activity.notes = notes
-//                    }
+//
+//                    Log.i(TAG, "success")
 //                    callback(true)
 //
 //                } else {
 //                    //failed
+//                    Log.i(TAG, "fail")
 //                    callback(false)
 //                }
 //            }
 //        })
 
-//    }
+    }
 
 
 

@@ -43,7 +43,7 @@ class User: Serializable {
         this.phone = userDetails.phone()
         this.address.loadAddress(userDetails.address())
         try {
-            loadLegal(userDetails.legal()!!)
+            loadLegal(userDetails.legal ()!!)
         }
         catch (e: Exception){
             //no legal rep set

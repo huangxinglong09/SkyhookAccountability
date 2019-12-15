@@ -1643,9 +1643,9 @@
             "description": "",
             "args": [],
             "type": {
-              "kind": "OBJECT",
+                  "kind": "OBJECT",
               "name": "Insured",
-              "ofType": null
+                  "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -1655,9 +1655,9 @@
             "description": "",
             "args": [],
             "type": {
-              "kind": "OBJECT",
+                  "kind": "OBJECT",
               "name": "Claimant",
-              "ofType": null
+                  "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2040,7 +2040,7 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
-                "ofType": null
+            "ofType": null
               }
             },
             "isDeprecated": false,
@@ -7455,9 +7455,9 @@
             "name": "organization",
             "description": "",
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
             },
             "defaultValue": null
           },
@@ -7475,9 +7475,9 @@
             "name": "phone",
             "description": "",
             "type": {
-              "kind": "SCALAR",
+                "kind": "SCALAR",
               "name": "String",
-              "ofType": null
+                "ofType": null
             },
             "defaultValue": null
           },
@@ -7495,9 +7495,9 @@
             "name": "street2",
             "description": "",
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
             },
             "defaultValue": null
           },
@@ -7527,7 +7527,7 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
-              "ofType": null
+            "ofType": null
             },
             "defaultValue": null
           }
@@ -7877,7 +7877,7 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
+        "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
               }
@@ -7900,7 +7900,7 @@
           },
           {
             "name": "phone",
-            "description": "",
+        "description": "",
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -8208,23 +8208,13 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Upload",
+                "name": "String",
                 "ofType": null
               }
             },
             "defaultValue": null
           }
         ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "Upload",
-        "description": "",
-        "fields": null,
-        "inputFields": null,
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": null

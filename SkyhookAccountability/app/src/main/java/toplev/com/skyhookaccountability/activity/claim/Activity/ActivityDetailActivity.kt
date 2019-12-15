@@ -27,6 +27,7 @@ import java.util.jar.Manifest
 import android.widget.ImageView.ScaleType
 import android.graphics.BitmapFactory
 import android.R.interpolator.linear
+import android.database.Cursor
 import android.widget.LinearLayout
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
@@ -35,8 +36,8 @@ import android.widget.ImageView
 import com.squareup.picasso.Picasso
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
+import android.provider.MediaStore
+import java.io.File
 
 
 class ActivityDetailActivity : AppCompatActivity(), OnCustomTimerListener {
@@ -53,7 +54,7 @@ class ActivityDetailActivity : AppCompatActivity(), OnCustomTimerListener {
         //set timer listener for activity tick
         App.shared!!.setTimerListener(this)
 
-        backButton.setOnClickListener({
+        backButton.setOnClickListener {
             //update time locally
             App.shared!!.selectedClaim.activities.get((intent.getIntExtra("selectedIndex",0))).totalElapsedMillis = activity.totalElapsedMillis
 
@@ -70,7 +71,7 @@ class ActivityDetailActivity : AppCompatActivity(), OnCustomTimerListener {
                 startActivity(intent)
             }
 
-        })
+        }
 
 
         activity = App.shared!!.selectedClaim.activities.get((intent.getIntExtra("selectedIndex",0)))
@@ -99,7 +100,7 @@ class ActivityDetailActivity : AppCompatActivity(), OnCustomTimerListener {
         }
 
         //set play/stop button click
-        actionButton.setOnClickListener({
+        actionButton.setOnClickListener {
             if (App.shared!!.activeActivity == null && !activity.status.equals("STARTED")){ // START ACTIVITY
                 actionButton.setBackgroundResource(R.drawable.stop_large)
                 activity.startActivity {
@@ -143,11 +144,11 @@ class ActivityDetailActivity : AppCompatActivity(), OnCustomTimerListener {
                 }
 
             }
-        })
+        }
 
 
 
-        attachPhotoLayout.setOnClickListener({
+        attachPhotoLayout.setOnClickListener {
             //check runtime permission
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                 if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) ==
@@ -156,17 +157,15 @@ class ActivityDetailActivity : AppCompatActivity(), OnCustomTimerListener {
                     val permissions = arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE);
                     //show popup to request runtime permission
                     requestPermissions(permissions, PERMISSION_CODE);
-                }
-                else{
+                } else{
                     //permission already granted
                     pickImageFromGallery();
                 }
-            }
-            else{
+            } else{
                 //system OS is < Marshmallow
                 pickImageFromGallery();
             }
-        })
+        }
     }
 
     override fun onTimer() {
@@ -237,6 +236,8 @@ class ActivityDetailActivity : AppCompatActivity(), OnCustomTimerListener {
         val layoutParams = LinearLayout.LayoutParams(imageLinearLayout.height, imageLinearLayout.height)
         imageView.setLayoutParams(layoutParams)
         imageLinearLayout.addView(imageView)
+
+        uploadImage(uri)
     }
 
     fun loadImages() {
@@ -260,6 +261,36 @@ class ActivityDetailActivity : AppCompatActivity(), OnCustomTimerListener {
         }
 
     }
+
+    fun uploadImage(imageUri: Uri) {
+
+        val selectedImage: File = File(getRealPathFromUri(imageUri)!!)
+
+        App.shared!!.selectedClaim.activities.get((intent.getIntExtra("selectedIndex",0))).uploadImage(selectedImage) {
+            if (it) {
+                println("Success")
+                loadImages()
+            } else {
+                println("Image upload failed. Please try again later.")
+            }
+        }
+    }
+
+    fun getRealPathFromUri(contentUri: Uri?): String? {
+        var cursor: Cursor? = null
+        return try {
+            val proj =
+                arrayOf(MediaStore.Images.Media.DATA)
+            cursor = contentResolver.query(contentUri!!, proj, null, null, null)
+            assert(cursor != null)
+            val column_index = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor.moveToFirst()
+            cursor.getString(column_index)
+        } finally {
+            cursor?.close()
+        }
+    }
+
 
 
 }

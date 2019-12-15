@@ -1,6 +1,5 @@
 
 
-
 query ClaimsList  {
     claims {
         edges {
@@ -100,6 +99,7 @@ query ClaimsList  {
 }
 
 
+
 mutation UpdateClaimEnd($claimId:ID!) {
   updateClaimEnd(input: { claimId: $claimId }) {
      success
@@ -173,13 +173,10 @@ mutation ActivityFileUpload($activityId: ID!, $file: String!){
         upload{
             id
             path
-
         }
-
+        
     }
 }
-
-
 
 
 
