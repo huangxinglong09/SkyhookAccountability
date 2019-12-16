@@ -93,11 +93,13 @@ class BeginAuthActivity : AppCompatActivity() {
         System.out.println(password.trim())
 
         User().loginUser(email.trim(),password.trim()) {
-            showLoading(false)
-            if(it){
-                goToNext()
-            } else{
-                errorTextView.setText("Login not recognized")
+            runOnUiThread {
+                showLoading(false)
+                if(it){
+                    goToNext()
+                } else{
+                    errorTextView.setText("Login not recognized")
+                }
             }
         }
 

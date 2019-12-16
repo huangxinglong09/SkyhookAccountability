@@ -10,10 +10,14 @@ import com.apollographql.apollo.skyhookaccountability.*
 import com.apollographql.apollo.skyhookaccountability.type.ActivityStatus
 import com.apollographql.apollo.skyhookaccountability.type.ActivityType
 import okhttp3.*
+import okio.Buffer
+import okio.BufferedSource
+import org.json.JSONObject
 import toplev.com.skyhookaccountability.support.App
 import java.io.File
 import java.io.IOException
 import java.io.Serializable
+import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 
 
@@ -294,6 +298,7 @@ class Activity: Serializable {
                 chain.proceed(request)
             }.build()
 
+            Log.i(TAG, "fileToUpload name >>> " + fileToUpload.name)
             val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("operations", operationDefinition)
                 .addFormDataPart("map", "{ \"0\": [\"variables.file\"] }")
@@ -316,6 +321,30 @@ class Activity: Serializable {
                 override fun onResponse(call: Call, response: okhttp3.Response) {
                     if (response.isSuccessful) {
                         Log.i(TAG, "success")
+
+                        val jsonObject = JSONObject()
+                        try {
+                            jsonObject.put("code", 200)
+                            jsonObject.put("status", "OK")
+                            jsonObject.put("message", "Successful")
+
+                            val contentType: MediaType? = response.body()!!.contentType()
+
+                            val source: BufferedSource = response.body()!!.source()
+                            source.request(Long.MAX_VALUE)
+                            val buffer: Buffer = source.buffer()
+
+                            val responseBodyString = buffer.clone().readString(Charset.forName("UTF-8"))
+                            val jsonObject: JSONObject = JSONObject(responseBodyString)
+                            val data = jsonObject.getJSONObject("data")
+                            val updateActivityUpload = data.getJSONObject("updateActivityUpload")
+                            val upload = updateActivityUpload.getJSONObject("upload")
+                            val pathString = upload.getString("path")
+
+                            Log.i(TAG, "path >>> $pathString")
+                        } catch (e: java.lang.Exception) {
+                            e.printStackTrace()
+                        }
                         callback(true)
                     } else {
                         Log.i(TAG, "fail")
