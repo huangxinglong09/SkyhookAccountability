@@ -65,17 +65,17 @@ class ClaimDetailActivity : AppCompatActivity(), OnCustomTimerListener {
         closeClaimButton.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
                 override fun onSlideComplete(view: SlideToActView) {
-                    App.shared!!.selectedClaim.closeClaim {
-                        if(it){
-                            //successfully closed
-                        } else{
-                            Handler(Looper.getMainLooper()).post(Runnable {
-                                closeClaimButton.resetSlider()
-                                Toast.makeText(applicationContext,"Failed to close claim. Please complete all your activities first.",Toast.LENGTH_SHORT).show()
-                            })
-
-                        }
-                    }
+//                    App.shared!!.selectedClaim.closeClaim {
+//                        if(it){
+//                            //successfully closed
+//                        } else{
+//                            Handler(Looper.getMainLooper()).post(Runnable {
+//                                closeClaimButton.resetSlider()
+//                                Toast.makeText(applicationContext,"Failed to close claim. Please complete all your activities first.",Toast.LENGTH_SHORT).show()
+//                            })
+//
+//                        }
+//                    }
 
                 }
             }

@@ -98,7 +98,7 @@
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="55dp"
             android:gravity="center"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal">
@@ -114,6 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="@color/dark_grey"
+                android:gravity="center_vertical"
                 android:textSize="15sp"
                 android:text="123 ABC Street, West Palm, Florida 449134"
                 android:padding="10dp"
@@ -126,7 +127,13 @@
             android:gravity="center"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal">
-
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="13dp"
+            android:background="@drawable/attachment"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            />
         <TextView
                 android:id="@+id/attachmentsTextView"
                 android:layout_width="match_parent"
@@ -135,7 +142,7 @@
                 android:layout_marginEnd="20dp"
                 android:textColor="@color/dark_grey"
                 android:textSize="15sp"
-                android:text="Attachements:"
+                android:text=""
                 android:paddingTop="10dp"
                 android:paddingBottom="15dp"
                 />

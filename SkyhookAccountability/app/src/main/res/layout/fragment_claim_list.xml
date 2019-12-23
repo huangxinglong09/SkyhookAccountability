@@ -14,11 +14,29 @@
         tools:context=".activity.claim.ClaimListFragment"
         tools:listitem="@layout/fragment_claim">
 
-    <ListView
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
             android:id="@+id/claimListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-    </ListView>
+        </ListView>
+
+        <TextView
+            android:id="@+id/placeholderTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/claims_placeholder"
+            android:gravity="center"
+            android:layout_margin="20dp"
+            android:textSize="17sp"
+            android:paddingTop="150dp"
+            android:textColor="@color/light_grey" />
+
+    </FrameLayout>
+
 
 </LinearLayout>
 

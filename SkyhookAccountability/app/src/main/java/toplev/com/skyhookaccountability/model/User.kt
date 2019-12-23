@@ -1,11 +1,15 @@
 package toplev.com.skyhookaccountability.model
 
+import android.content.Context
+import android.content.Intent
 import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.skyhookaccountability.ClaimsListQuery
 import com.apollographql.apollo.skyhookaccountability.LoginUserMutation
 import kotlinx.android.synthetic.main.activity_begin_auth.*
+import toplev.com.skyhookaccountability.activity.auth.BeginAuthActivity
+import toplev.com.skyhookaccountability.activity.claim.ClaimDetailActivity
 import toplev.com.skyhookaccountability.support.App
 import java.io.Serializable
 import java.lang.Exception
@@ -66,15 +70,15 @@ class User: Serializable {
     }
 
     fun loadCustomer(userDetails: ClaimsListQuery.Customer){
-        this.business = userDetails.customerName()!!
-        this.fullName = userDetails.customerContact()!!
+        this.business = userDetails.name()!!
+        this.fullName = userDetails.contact()!!
         this.phone = userDetails.phone()!!
         this.address.loadAddress(userDetails.address()!!)
     }
 
     fun loadFirm(userDetails: ClaimsListQuery.Ia) {
-        this.business = userDetails.iaName()!!
-        this.fullName = userDetails.iaContact()!!
+        this.business = userDetails.name()!!
+        this.fullName = userDetails.contact()!!
         this.phone = userDetails.phone()!!
         this.address.loadAddress(userDetails.address()!!)
     }
@@ -84,10 +88,13 @@ class User: Serializable {
         this.fullName = ""
         this.email = ""
         this.jwt = ""
+
+        App.shared!!.sharedPref.edit().putString("email","").apply()
+        App.shared!!.sharedPref.edit().putString("password","").apply()
     }
 
     //graphql login
-    fun loginUser(email:String, password: String, callback: (Boolean) -> Unit){
+    fun loginUser(email: String, password: String, callback: (Boolean) -> Unit){
 
         //login user to server
         val loginUser = LoginUserMutation(email,password)
@@ -110,6 +117,7 @@ class User: Serializable {
 
                     App.shared!!.user = User()
                     val userDetails = response.data()!!.login()!!.user()
+                    System.out.println(userDetails.toString())
                     App.shared!!.user.loadUser(userDetails!!)
 
                     //set header for graphql calls
@@ -124,6 +132,12 @@ class User: Serializable {
             }
         })
 
+    }
+
+    fun logout(context: Context){
+        this.resetUser()
+        val intent = Intent(context, BeginAuthActivity::class.java)
+        context.startActivity(intent)
     }
 
 }

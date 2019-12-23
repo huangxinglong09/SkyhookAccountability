@@ -27,7 +27,10 @@ import java.util.jar.Manifest
 import android.widget.ImageView.ScaleType
 import android.graphics.BitmapFactory
 import android.R.interpolator.linear
+import android.content.res.Resources
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.widget.LinearLayout
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
@@ -37,6 +40,7 @@ import com.squareup.picasso.Picasso
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.provider.MediaStore
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 
@@ -44,7 +48,7 @@ class ActivityDetailActivity : AppCompatActivity(), OnCustomTimerListener {
 
     lateinit var activity: Activity
 
-    var images = arrayListOf<Uri>()
+    fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +83,9 @@ class ActivityDetailActivity : AppCompatActivity(), OnCustomTimerListener {
 
         //load image uploads if available
         loadImages()
+
+        System.out.println("NOTESSSSSS")
+        System.out.println(activity.notes)
 
         //set previously added notes
         if(!activity.notes.equals("")){
@@ -187,6 +194,32 @@ class ActivityDetailActivity : AppCompatActivity(), OnCustomTimerListener {
     }
 
 
+    fun loadImages() {
+
+        if(activity.uploads.size > 0){
+            attachPhotoTextView.visibility = View.INVISIBLE
+
+            for (image in activity.uploads){
+                val imageView = ImageView(this)
+                imageView.setPadding(2, 2, 2, 2)
+
+                Picasso.get()
+                    .load(image)
+                    .placeholder(R.drawable.attach_photo)
+                    .error(R.drawable.attach_photo)
+                    .into(imageView)
+
+                imageView.setScaleType(ScaleType.FIT_XY)
+                val layoutParams = LinearLayout.LayoutParams(60.toPx(), 60.toPx())
+                layoutParams.setMargins(5,10,5,10)
+                imageView.setLayoutParams(layoutParams)
+                imageLinearLayout.addView(imageView)
+            }
+        }
+
+    }
+
+
     private fun pickImageFromGallery() {
         //Intent to pick image
         val intent = Intent(Intent.ACTION_PICK)
@@ -234,37 +267,17 @@ class ActivityDetailActivity : AppCompatActivity(), OnCustomTimerListener {
         imageView.setImageURI(uri)
         imageView.setScaleType(ScaleType.FIT_XY)
         val layoutParams = LinearLayout.LayoutParams(imageLinearLayout.height, imageLinearLayout.height)
+        layoutParams.setMargins(5,10,5,10)
         imageView.setLayoutParams(layoutParams)
         imageLinearLayout.addView(imageView)
 
         uploadImage(uri)
     }
 
-    fun loadImages() {
-        if(images.size > 0){
-            attachPhotoTextView.visibility = View.INVISIBLE
-
-            for (image in images){
-                val imageView = ImageView(this)
-                imageView.setPadding(2, 2, 2, 2)
-
-                Picasso.get()
-                    .load(image)
-                    .placeholder(R.drawable.attach_photo)
-                    .error(R.drawable.attach_photo)
-                    .into(imageView);
-                imageView.setScaleType(ScaleType.FIT_XY)
-                val layoutParams = LinearLayout.LayoutParams(imageLinearLayout.height, imageLinearLayout.height)
-                imageView.setLayoutParams(layoutParams)
-                imageLinearLayout.addView(imageView)
-            }
-        }
-
-    }
 
     fun uploadImage(imageUri: Uri) {
 
-        val selectedImage: File = File(getRealPathFromUri(imageUri)!!)
+        val selectedImage = File(imageUri.path!!)
 
         App.shared!!.selectedClaim.activities.get((intent.getIntExtra("selectedIndex",0))).uploadImage(selectedImage) {
             if (it) {

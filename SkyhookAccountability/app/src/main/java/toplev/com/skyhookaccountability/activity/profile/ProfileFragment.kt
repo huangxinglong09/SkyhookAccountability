@@ -78,18 +78,6 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         parentContext = context as MainActivity
 
-        //set header and data
-        val headerView = layoutInflater.inflate(toplev.com.skyhookaccountability.R.layout.view_profile_header, null) as View
-        headerView.fullNameTextView.text = App.shared!!.user.fullName
-        headerView.emailTextView.text = App.shared!!.user.email
-
-        closedClaimListView.addHeaderView(headerView)
-        closedClaimListView.setOnItemClickListener { _, _, position, _ ->
-            val intent = Intent(activity!!.applicationContext, ClaimDetailActivity::class.java)
-            App.shared!!.selectedClaim = claimsList.get(position)
-            startActivity(intent)
-
-        }
     }
 
 
@@ -98,6 +86,22 @@ class ProfileFragment : Fragment() {
 
         //load users closed claims on profile
         loadClaims()
+
+        //set header and data
+        val headerView = layoutInflater.inflate(toplev.com.skyhookaccountability.R.layout.view_profile_header, null) as View
+        headerView.fullNameTextView.text = App.shared!!.user.fullName
+        headerView.emailTextView.text = App.shared!!.user.email
+
+        closedClaimListView.addHeaderView(headerView)
+        closedClaimListView.setOnItemClickListener { _, _, position, _ ->
+            if(position>0){
+                val intent = Intent(activity!!.applicationContext, ClaimDetailActivity::class.java)
+                App.shared!!.selectedClaim = claimsList.get(position-1)
+                startActivity(intent)
+            }
+
+
+        }
 
     }
 
@@ -123,6 +127,10 @@ class ProfileFragment : Fragment() {
                     }
                 }
 
+            } else {
+                parentContext.runOnUiThread {
+                    parentContext.showLoading(false)
+                }
             }
         }
     }

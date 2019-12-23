@@ -3,6 +3,7 @@ package toplev.com.skyhookaccountability.model
 import android.util.Log
 import android.webkit.MimeTypeMap
 import com.apollographql.apollo.ApolloCall
+import com.apollographql.apollo.api.FileUpload
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
@@ -41,7 +42,13 @@ class Activity: Serializable {
         this.totalElapsedMillis = activityDetails.totalElapsedMillis() ?: 0
         this.notes = activityDetails.notes() ?: ""
         this.status = activityDetails.status()!!.name
-//        this.uploads = activityDetails
+        try{
+            for(u in activityDetails.uploads()!!){
+                uploads.add(u.url()!!)
+            }
+        }catch (e: java.lang.Exception){
+            //nothing
+        }
 
     }
 
@@ -270,17 +277,16 @@ class Activity: Serializable {
 
 
     fun uploadImage(fileToUpload: File, callback: (Boolean) -> Unit) {
-       var mimeType = "image/jpeg"
-        val extension = MimeTypeMap.getFileExtensionFromUrl(fileToUpload.path)
-        if (extension != null) {
-            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)!!
-        }
-
-        val mutation = ActivityFileUploadMutation.builder()
-//            .file(FileUpload(mimeType, file))
-            .file(fileToUpload.path)
-            .activityId(this.id)
-            .build()
+//       var mimeType = "image/jpeg"
+//        val extension = MimeTypeMap.getFileExtensionFromUrl(fileToUpload.path)
+//        if (extension != null) {
+//            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)!!
+//        }
+//
+//        val mutation = ActivityFileUploadMutation.builder()
+//            .file(FileUpload(mimeType, fileToUpload))
+//            .activityId(this.id)
+//            .build()
 
         val operationDefinition = "{\"query\": \"" +
                 "mutation ActivityFileUpload(\$activityId: ID!, \$file: Upload!) { updateActivityUpload(input: {activityId: \$activityId, file: \$file}) { upload { id path } } }" +
@@ -357,33 +363,6 @@ class Activity: Serializable {
             ex.printStackTrace()
         }
 
-
-//        App.shared!!.apollo.mutate(mutation).enqueue(object : ApolloCall.Callback<ActivityFileUploadMutation.Data>() {
-//
-//            override fun onFailure(e: ApolloException) {
-//                println("Failed to update notes... "+e.localizedMessage);
-//                Log.i(TAG, "onFailure")
-//                callback(false)
-//            }
-//
-//            override fun onResponse(response: Response<ActivityFileUploadMutation.Data>) {
-//                println("Notes pushed...")
-//                println(response.data().toString())
-//                Log.i(TAG, "success")
-//
-//                if (response.data()!!.updateActivityUpload() != null) {
-//                    //success.. added notes
-//
-//                    Log.i(TAG, "success")
-//                    callback(true)
-//
-//                } else {
-//                    //failed
-//                    Log.i(TAG, "fail")
-//                    callback(false)
-//                }
-//            }
-//        })
 
     }
 

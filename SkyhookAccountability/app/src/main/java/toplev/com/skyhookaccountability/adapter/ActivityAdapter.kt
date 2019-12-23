@@ -106,7 +106,6 @@ class ActivityAdapter(items: ArrayList<Activity>, ctx: Context) :
                         return@setOnClickListener
 
                     if(activity.id.equals(App.shared!!.activeActivity!!.id)){
-                        viewHolder.action!!.setImageResource(toplev.com.skyhookaccountability.R.drawable.play_small)
                         activity.endActivity {
                             //success
                             //stop location service

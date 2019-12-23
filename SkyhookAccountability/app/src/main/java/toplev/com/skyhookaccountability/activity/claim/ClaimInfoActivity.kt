@@ -33,6 +33,8 @@ class ClaimInfoActivity : AppCompatActivity() {
         setInsuredInfo()
         setClaimantInfo()
 
+        claimNotesTextView.text = App.shared!!.selectedClaim.notes
+
     }
 
 

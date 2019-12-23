@@ -7,7 +7,6 @@ import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.skyhookaccountability.ClaimsListQuery
 import com.apollographql.apollo.skyhookaccountability.LoginUserMutation
 import com.apollographql.apollo.skyhookaccountability.UpdateActivityEndMutation
-import com.apollographql.apollo.skyhookaccountability.UpdateClaimEndMutation
 import okhttp3.OkHttpClient
 import toplev.com.skyhookaccountability.support.App
 import java.io.Serializable
@@ -28,6 +27,7 @@ class Claim: Serializable {
     var status = ""
     var claimDate = ""
     var dueDate = ""
+    var notes = ""
 
 
 
@@ -35,9 +35,10 @@ class Claim: Serializable {
     fun loadClaim(claimDetails: ClaimsListQuery.Node) {
         this.id = claimDetails.id()
         this.claimNumber = claimDetails.claimNumber()!!
+
         this.claimDate = SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH).format(claimDetails.claimDate() ?: Date())
         this.dueDate = SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH).format(claimDetails.dueDate() ?: Date())
-
+        this.notes = claimDetails.notes() ?: "-"
         try{
             this.claimant.loadClaimant(claimDetails.claimant()!!)
         }catch (e:Exception){
@@ -109,6 +110,8 @@ class Claim: Serializable {
                     //return claims
                     callback(claimsList)
 
+                } else {
+                    callback(null)
                 }
             }
         })
@@ -116,35 +119,35 @@ class Claim: Serializable {
     }
 
 
-    fun closeClaim(callback: (Boolean) -> Unit){
-         //starting fresh
-            val mutation = UpdateClaimEndMutation(this.id)
-            App.shared!!.apollo.mutate(mutation).enqueue(object : ApolloCall.Callback<UpdateClaimEndMutation.Data>() {
-
-                override fun onFailure(e: ApolloException) {
-                    System.out.println("Failed to update claim to closed... "+e.localizedMessage);
-                    callback(false)
-                }
-
-                override fun onResponse(response: Response<UpdateClaimEndMutation.Data>) {
-
-                    System.out.println(response.data().toString())
-                    if (response.data()!!.updateClaimEnd()!!.success()) {
-                        //success.. finished activity
-                        this@Claim.status = "CLOSED"
-
-                        callback(true)
-
-                    } else {
-                        //failed
-                        callback(false)
-                    }
-                }
-            })
-
-
-
-    }
+//    fun closeClaim(callback: (Boolean) -> Unit){
+//         //starting fresh
+//            val mutation = UpdateClaimEndMutation(this.id)
+//            App.shared!!.apollo.mutate(mutation).enqueue(object : ApolloCall.Callback<UpdateClaimEndMutation.Data>() {
+//
+//                override fun onFailure(e: ApolloException) {
+//                    System.out.println("Failed to update claim to closed... "+e.localizedMessage);
+//                    callback(false)
+//                }
+//
+//                override fun onResponse(response: Response<UpdateClaimEndMutation.Data>) {
+//
+//                    System.out.println(response.data().toString())
+//                    if (response.data()!!.updateClaimEnd()!!.success()) {
+//                        //success.. finished activity
+//                        this@Claim.status = "CLOSED"
+//
+//                        callback(true)
+//
+//                    } else {
+//                        //failed
+//                        callback(false)
+//                    }
+//                }
+//            })
+//
+//
+//
+//    }
 
 
 }

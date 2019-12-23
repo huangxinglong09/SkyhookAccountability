@@ -83,6 +83,10 @@ class ClaimListFragment : Fragment() {
                        }
                     }
 
+                    if (claimsList.size > 0) {
+                        placeholderTextView.visibility = View.INVISIBLE
+                    }
+
                     //sort most recent default
                     Collections.sort(claimsList, object : Comparator<Claim> {
                         override fun compare(o1: Claim, o2: Claim): Int {
@@ -97,6 +101,10 @@ class ClaimListFragment : Fragment() {
 
                 }
 
+            } else {
+                parentContext.runOnUiThread {
+                    parentContext.showLoading(false)
+                }
             }
         }
     }
